@@ -20,6 +20,8 @@ export const InspectorPanel = ({ ...props }: React.HTMLAttributes<HTMLDivElement
         riveReloadKey,
         activeArtboard,
         activeStateMachine,
+        autoBind,
+        viewModelInstance,
         setActiveStateMachine,
         setActiveCodeSnippet,
         setViewModelName,
@@ -50,6 +52,7 @@ export const InspectorPanel = ({ ...props }: React.HTMLAttributes<HTMLDivElement
 
     const onAccordionChange = (value: string[]) => {
         const addedItem = value.find(v => !accordion.includes(v))
+        const removedItem = accordion.find(v => !value.includes(v))
         if (addedItem) {
             const snippetMap: Record<string, number> = {
                 'artboard': 0,
@@ -63,6 +66,10 @@ export const InspectorPanel = ({ ...props }: React.HTMLAttributes<HTMLDivElement
             if (snippetIndex !== undefined) {
                 setActiveCodeSnippet(snippetIndex)
             }
+        }
+        if (removedItem == "data-binding" && !autoBind && viewModelInstance) {
+            // [bug]: VM instance values are reset upon accordion collapse and re-open
+            return
         }
         setAccordion(value)
     }

@@ -34,12 +34,9 @@ export const AssetSettings = () => {
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
 
-        if (!file || !assetToUpdate) {
-            console.log('No file selected or no asset to update.')
-            return
-        }
+        if (!file || !assetToUpdate) return
+        
         const fileType = categorizeFile(file.name)
-        console.log("Asset is", fileType)
 
         try {
             const fileBytes = new Uint8Array(await file.arrayBuffer());

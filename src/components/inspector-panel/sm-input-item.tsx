@@ -23,7 +23,21 @@ export const SMInputRow = (
         name,
     );
 
+    // Check if input exists and is properly initialized
     if (!input) {
+        return <Item variant="outline" size="sm">
+            <ItemContent>
+                <ItemTitle className="font-normal">
+                    <code>{name}</code> not found
+                </ItemTitle>
+            </ItemContent>
+        </Item>
+    }
+
+    // Safely check if input value is accessible
+    try {
+        void input.value;
+    } catch (error) {
         return <Item variant="outline" size="sm">
             <ItemContent>
                 <ItemTitle className="font-normal">
@@ -50,21 +64,21 @@ export const SMInputRow = (
         </ItemContent>
         <ItemActions className="w-24 h-8 justify-end">
             {
-                type === StateMachineInputType.Trigger && 
+                type === StateMachineInputType.Trigger &&
                 <Button variant="outline" className="w-full h-full active:scale-90 transition-transform" onClick={() => input.fire()} >
                     trigger
                 </Button>
             }
             {
                 type === StateMachineInputType.Boolean &&
-                <Checkbox 
-                    className="size-6 border-muted-foreground/50" 
-                    defaultChecked={input.value as boolean} 
-                    onCheckedChange={(state) => input.value = state as boolean} 
+                <Checkbox
+                    className="size-6 border-muted-foreground/50"
+                    defaultChecked={input.value as boolean}
+                    onCheckedChange={(state) => input.value = state as boolean}
                 />
             }
             {
-                type === StateMachineInputType.Number && 
+                type === StateMachineInputType.Number &&
                 <NumberInput
                     className="h-full w-full text-right"
                     defaultValue={input.value as number}

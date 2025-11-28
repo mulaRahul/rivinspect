@@ -19,7 +19,7 @@ export const ArtboardSettings = () => {
         layoutScaleFactor,
         setActiveArtboard,
         setSize,
-        setFit,
+        updateFit,
         setAlignment,
         setLayoutScaleFactor,
     } = useInspectorContext()
@@ -127,7 +127,7 @@ export const ArtboardSettings = () => {
                 <Label className="text-muted-foreground">Fit</Label>
                 <Select
                     defaultValue={Fit.Contain}
-                    onValueChange={setFit}
+                    onValueChange={updateFit}
                 >
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder="Fit Mode" />

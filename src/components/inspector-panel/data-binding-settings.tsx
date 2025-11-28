@@ -74,12 +74,12 @@ export const DataBindingSettings = () => {
     const onTabChange = (value: string) => {
         const bind = value === Tab.AutoBind
         setAutoBind(bind)
+        reloadRive()
         if (bind) {
-            reloadRive()
             setViewModelName(undefined)
             setViewModelInstanceName(undefined)
         } else {
-            rive?.bindViewModelInstance(null)
+            // reloadRive()
         }
     }
 

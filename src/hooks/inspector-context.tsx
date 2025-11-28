@@ -39,7 +39,7 @@ export type InspectorContext = {
   onRiveReady: (riveInstance: Rive) => void
   setSize: (size: { x: number; y: number }) => void
   setActiveArtboard: (artboardName: string) => void
-  setFit: (fit: Fit) => void
+  updateFit: (fit: Fit) => void
   setAlignment: (alignment: Alignment) => void
   setLayoutScaleFactor: (scale: number) => void
   setEnableFPSCounter: (enable: boolean) => void
@@ -231,12 +231,17 @@ export const InspectorContextProvider = ({ children }: { children: React.ReactNo
     }
 
     if (autoBind) {
-      setViewModelInstance(riveInstance.viewModelInstance ?? undefined)
+      const vm = riveInstance?.defaultViewModel()
+      if (!vm || vm.instanceCount == 0) {
+        setViewModelInstance(undefined)
+        toast.warning("No View Model Instance is available to bind.", { description: "View Model Instances must be created and exported from the Rive Editor" })
+      } else {
+        setViewModelInstance(riveInstance.viewModelInstance ?? undefined)
+      }
     } else {
       if (viewModelName && viewModelInstance) {
         riveInstance.bindViewModelInstance(viewModelInstance)
       } else {
-        console.log("unbind view model instance")
         setViewModelInstance(undefined)
       }
     }
@@ -244,6 +249,15 @@ export const InspectorContextProvider = ({ children }: { children: React.ReactNo
     if (riveInstance.playingAnimationNames.length > 0) {
       riveInstance.stop(riveInstance.playingAnimationNames)
     }
+  }
+
+  const updateFit = (fit: Fit) => {
+    setFit((prev) => {
+      if (prev == Fit.Layout) {
+        reloadRive()
+      }
+      return fit
+    })
   }
 
   const toggleAnimation = (animationName: string) => {
@@ -304,7 +318,7 @@ export const InspectorContextProvider = ({ children }: { children: React.ReactNo
     setActiveArtboard,
     setSize,
     setAlignment,
-    setFit,
+    updateFit,
     setLayoutScaleFactor,
     setEnableFPSCounter,
     setActiveCodeSnippet,

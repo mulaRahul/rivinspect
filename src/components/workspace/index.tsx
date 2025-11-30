@@ -25,7 +25,7 @@ export const Workspace = ({ ...props }: React.HTMLAttributes<HTMLDivElement>) =>
                     Using Rive React Runtime: <code>@rive-app/react-webgl2</code><br />
                     Version: <code>^4.24.0</code>
                     <br /><br />
-                    This site does not collect analytics, logs, or user files. Check <a href="/privacy-policy" className="underline">privacy policy</a> for more details.
+                    This site does not collect analytics, logs, or user files. Check <a href="/privacy-policy.html" className="underline">privacy policy</a> for more details.
                 </PopoverContent>
             </Popover>
             <div className="ml-auto"></div>

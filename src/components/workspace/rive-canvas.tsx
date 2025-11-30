@@ -4,7 +4,7 @@ import { useRive, Layout } from "@rive-app/react-webgl2";
 
 import { cn } from "@/lib/utils";
 import { useInspectorContext } from "@/hooks/inspector-context";
-import { H3, InlineCode, Paragraph } from "@/components/ui/type"
+import { H2, InlineCode, Paragraph } from "@/components/ui/type"
 
 
 export const RiveCanvas = () => {
@@ -41,11 +41,11 @@ export const RiveCanvas = () => {
 
     return buffer ? (
         <div id="container" className={cn(
-                "relative bg-transparent rounded-xl overflow-hidden outline",
-                "has-[.close-btn:hover]:outline-red-500 has-[.close-btn:hover]:outline-offset-8 transition-all"
-            )}
+            "relative bg-transparent rounded-xl overflow-hidden outline",
+            "has-[.close-btn:hover]:outline-red-500 has-[.close-btn:hover]:outline-offset-8 transition-all"
+        )}
             style={{ width: `${size.x}%`, height: `${size.y}%` }}
-            >
+        >
             <div className="flex items-center absolute top-4 left-4 p-2 gap-2 rounded-md bg-muted border text-xs">
                 {fileName || "?.riv"}
                 <X
@@ -62,7 +62,7 @@ export const RiveCanvas = () => {
             id="uploadArea"
             ref={uploadAreaRef}
             className={cn(
-                "w-2/4 h-2/4 min-w-[300px] min-h-[200px]",
+                "w-2/4 h-2/4 p-8 min-w-[300px] min-h-[200px]",
                 "uploadarea flex flex-col gap-2 items-center justify-center bg-secondary/20 rounded-2xl outline-2",
                 "cursor-pointer hover:bg-secondary/40 hover:outline-offset-8 hover:outline-blue-600/50 transition-all",
                 isDragging && "outline-blue-600 outline-offset-8 bg-secondary/40"
@@ -77,8 +77,11 @@ export const RiveCanvas = () => {
                     ? <FileCheck size={48} className="mb-4 text-blue-500 transition-colors" />
                     : <UploadIcon size={48} className="mb-4 uploadarea-hover:text-blue-600 transition-colors" />
             }
-            <H3>{isDragging ? "Release to drop" : "Drag & Drop your .riv file here"}</H3>
-            <Paragraph className="text-muted-foreground">Or click to browse files</Paragraph>
+            <H2>{isDragging ? "Release to drop" : "Drag & Drop your .riv file here"}</H2>
+            <Paragraph className="text-muted-foreground text-center max-w-[600px]">
+                Your .riv files are never uploaded, stored, or sent to any server.
+                All processing happens locally using the Rive WebAssembly runtime.
+            </Paragraph>
             <InlineCode className="mt-2 px-2 py-1 text-xs text-muted-foreground font-light bg-primary-foreground rounded">Supports .riv files</InlineCode>
             <input
                 hidden

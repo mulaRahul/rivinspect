@@ -19,11 +19,13 @@ export const Workspace = ({ ...props }: React.HTMLAttributes<HTMLDivElement>) =>
                 <PopoverTrigger>
                     <Button variant="ghost" size="icon"><InfoIcon className="size-4" /></Button>
                 </PopoverTrigger>
-                <PopoverContent className="text-xs">
-                    Riv Inspect is a tool to inspect and debug <code>.riv</code> files. Not affiliated with Rive.
+                <PopoverContent className="text-sm">
+                    Riv Inspect is an open-source tool to inspect and debug <code>.riv</code> files. Not affiliated with Rive.
                     <br /><br />
                     Using Rive React Runtime: <code>@rive-app/react-webgl2</code><br />
                     Version: <code>^4.24.0</code>
+                    <br /><br />
+                    This site does not collect analytics, logs, or user files. Check <a href="/privacy-policy" className="underline">privacy policy</a> for more details.
                 </PopoverContent>
             </Popover>
             <div className="ml-auto"></div>

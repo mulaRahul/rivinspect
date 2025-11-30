@@ -3,24 +3,42 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "
 import { HelpCircle, SearchIcon } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
-
-interface TextRun {
-    name: string
-    value: string
-}
 
 export const TextSettings = () => {
     const { rive } = useInspectorContext()
 
     const [runName, setRunName] = useState<string>("")
-    const [runs, setRuns] = useState<TextRun[]>([])
+    const [runs, setRuns] = useState<Map<string, string>>(new Map())
+    const prevRiveRef = useRef(rive)
+
+    // Sync runs with new rive instance
+    useEffect(() => {
+        if (rive !== prevRiveRef.current) {
+            prevRiveRef.current = rive
+            if (!rive) {
+                setRuns(new Map())
+                return
+            }
+            // Re-validate existing runs with new rive instance
+            setRuns(prev => {
+                const updated = new Map<string, string>()
+                prev.forEach((_, name) => {
+                    const value = rive.getTextRunValue(name)
+                    if (value) {
+                        updated.set(name, value)
+                    }
+                })
+                return updated
+            })
+        }
+    }, [rive])
 
     const findTextRun = () => {
-        if (!rive || !runName) return
+        if (!rive || !runName.trim()) return
 
-        if (runs.find(r => r.name === runName)) {
+        if (runs.has(runName)) {
             toast.info(`Text run "${runName}" is already added.`)
             return
         }
@@ -32,18 +50,18 @@ export const TextSettings = () => {
                 description: "The text run name must be marked as exported in the Rive editor to make it queryable at runtime."
             })
         } else {
-            setRuns(prev => {
-                return [...prev, { name: runName, value }]
-            })
+            setRuns(prev => new Map(prev).set(runName, value))
+            setRunName("")
         }
     }
 
-    const updateTextRun = (runName: string, newValue: string) => {
+    const updateTextRun = (name: string, newValue: string) => {
         if (!rive) return
-        rive.setTextRunValue(runName, newValue)
+        rive.setTextRunValue(name, newValue)
+        setRuns(prev => new Map(prev).set(name, newValue))
 
         // force a render update if no animations or state machines are playing
-        if (rive.playingAnimationNames.length == 0 && rive.playingStateMachineNames.length == 0) {
+        if (rive.playingAnimationNames.length === 0 && rive.playingStateMachineNames.length === 0) {
             rive.play()
             rive.stop()
         }
@@ -51,7 +69,12 @@ export const TextSettings = () => {
 
     return <>
         <InputGroup>
-            <InputGroupInput placeholder="text run" value={runName} onChange={e => setRunName(e.target.value)} />
+            <InputGroupInput 
+                placeholder="text run" 
+                value={runName} 
+                onChange={e => setRunName(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && findTextRun()}
+            />
 
             <InputGroupAddon align="inline-end">
                 <InputGroupButton variant="secondary" onClick={findTextRun} disabled={!rive}>
@@ -77,14 +100,17 @@ export const TextSettings = () => {
             </Tooltip>
         </InputGroup>
 
-
         {
-            runs.map(run => (
-                <InputGroup key={run.name}>
-                    <InputGroupInput id="text-field" defaultValue={run.value} onChange={e => updateTextRun(run.name, e.target.value)} />
+            Array.from(runs.entries()).map(([name, value]) => (
+                <InputGroup key={name}>
+                    <InputGroupInput 
+                        id={`text-run-${name}`} 
+                        value={value} 
+                        onChange={e => updateTextRun(name, e.target.value)} 
+                    />
                     <InputGroupAddon align="block-start">
-                        <Label htmlFor="text-field" className="text-primary">
-                            {run.name}
+                        <Label htmlFor={`text-run-${name}`} className="text-primary">
+                            {name}
                         </Label>
                     </InputGroupAddon>
                 </InputGroup>

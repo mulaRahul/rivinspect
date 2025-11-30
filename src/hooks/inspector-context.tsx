@@ -160,6 +160,7 @@ export const InspectorContextProvider = ({ children }: { children: React.ReactNo
     setViewModelName(undefined)
     setViewModelInstanceName(undefined)
     setViewModelInstance(undefined)
+    setShowCode(false)
   }
 
   const updateRiveFile = async (file?: File) => {

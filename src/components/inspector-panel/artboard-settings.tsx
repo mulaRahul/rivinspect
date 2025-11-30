@@ -126,7 +126,7 @@ export const ArtboardSettings = () => {
             <div className="flex flex-1 flex-col gap-3">
                 <Label className="text-muted-foreground">Fit</Label>
                 <Select
-                    defaultValue={Fit.Contain}
+                    value={fit}
                     onValueChange={updateFit}
                 >
                     <SelectTrigger className="w-full">

@@ -11,6 +11,7 @@ import reportWebVitals from './reportWebVitals.ts'
 // Create a new router instance
 const router = createRouter({
   routeTree,
+  basepath: '/rivinspect',
   context: {},
   defaultPreload: 'intent',
   scrollRestoration: true,

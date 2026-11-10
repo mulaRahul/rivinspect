@@ -1,4 +1,4 @@
-An unofficial tool for developers to inspect rive runtime (`.riv`) files.  Built using Rive React Runtime: `@rive-app/react-webgl2@4.24.0`.
+An unofficial tool for developers to inspect rive runtime (`.riv`) files.  Built using Rive React Runtime: `@rive-app/react-webgl2@4.39.0`.
 
 ![Data Binding](./data-binding.png)
 
